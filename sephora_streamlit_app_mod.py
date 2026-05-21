@@ -251,8 +251,8 @@ def load_data():
     "https://drive.google.com/uc?export=download&id=1ML-kHF0-SFNhWOyC1ypGNfqLpT-0NwdI",
     ]
     df_product = pd.read_csv(product_file, low_memory=False)
-    dfs = [pd.read_csv(f, low_memory=False) for f in review_files]
-
+    dfs = [pd.read_csv(f, low_memory=False,on_bad_lines="skip") for f in review_files]
+    df_reviews = pd.concat(dfs, ignore_index=True)
     df_reviews = df_reviews.loc[:, ~df_reviews.columns.str.startswith("Unnamed")]
     df_product = df_product.loc[:, ~df_product.columns.str.startswith("Unnamed")]
 
