@@ -1,7 +1,5 @@
 # Sephora Beauty Analytics
 
-IV Semester Major Project — Statistical Data Analysis, MSc Statistics, Osmania University
-
 ---
 
 ## About
@@ -43,7 +41,6 @@ sephora-beauty-analytics/
 ├── sephora_streamlit_app_mod.py   # Main dashboard app
 ├── product_info.csv               # Product data (27 variables)
 ├── reviews_1250end.csv            # Sample review file (rest downloaded from Kaggle)
-├── Project_Proposal-_08.docx      # Project proposal
 ├── requirements.txt
 ├── .gitignore
 └── README.md
@@ -51,18 +48,18 @@ sephora-beauty-analytics/
 
 ---
 
-## What's done
+## Process:
 
 ### 1. Data Preprocessing
 
-The five review files are merged with product metadata on `product_id`. Columns with more than 50% missing values (`variation_desc`, `sale_price_usd`, etc.) are dropped. Remaining nulls in categorical columns like `skin_type`, `eye_color`, and `hair_color` are filled with `"Unknown"`. New features are engineered — `price_tier` (Budget / Mid / Premium / Luxury), `sentiment_label` from rating, and `submission_year` from timestamp.
+The five review files are merged with product metadata on product_id. Columns with more than 50% missing values (variation_desc, sale_price_usd, etc.) are dropped. Remaining nulls in categorical columns like skin_type, eye_color, and hair_color are filled with "Unknown". New features are engineered — price_tier (Budget / Mid / Premium / Luxury), sentiment_label from rating, and submission_year from timestamp.
 
 ### 2. Exploratory Data Analysis
 
 Descriptive statistics are computed for all numeric variables including skewness and kurtosis. Key findings from EDA:
 
-- `rating` is strongly left-skewed — most reviewers give 4 or 5 stars
-- `price_usd` and `loves_count` are heavily right-skewed, with a small number of luxury products and viral items pulling the mean far above the median
+- rating is strongly left-skewed — most reviewers give 4 or 5 stars
+- price_usd and loves_count are heavily right-skewed, with a small number of luxury products and viral items pulling the mean far above the median
 - Review volume has grown steadily year-on-year, but average ratings have stayed flat around 4.0–4.2, suggesting consistent product quality
 
 Visualizations include price distribution histograms, box plots by category, demographic breakdowns (skin type, eye color, hair color), price vs rating scatter, and a Pearson correlation heatmap across 8 numeric variables.
@@ -74,15 +71,15 @@ Four formal tests are run with α = 0.05:
 | Test | Variables | Method | Result |
 |---|---|---|---|
 | H1 | Skin type × Is Recommended | Chi-Square | Reject H₀ — significant association |
-| H3 | Limited Edition vs Standard price | Welch's t-Test | Reject H₀ — significantly different means |
-| H4 | Price vs Loves Count | Pearson Correlation | Weak positive r, significant p-value |
-| H5 | Sephora Exclusive × Rating Tier | Chi-Square | Reject H₀ — different rating distributions |
+| H2 | Limited Edition vs Standard price | Welch's t-Test | Reject H₀ — significantly different means |
+| H3 | Price vs Loves Count | Pearson Correlation | Weak positive r, significant p-value |
+| H4 | Sephora Exclusive × Rating Tier | Chi-Square | Reject H₀ — different rating distributions |
 
 Each test shows the statistic, p-value, degrees of freedom, and a plain-language interpretation of what the result means for consumer behavior.
 
 ### 4. NLP & Text Analysis
 
-Review text is preprocessed using a standard NLP pipeline — lowercasing, punctuation removal, tokenization (`NLTK word_tokenize`), stopword removal, and lemmatization (`WordNetLemmatizer`). This runs on a 30,000-review sample for speed.
+Review text is preprocessed using a standard NLP pipeline — lowercasing, punctuation removal, tokenization (NLTK word_tokenize), stopword removal, and lemmatization (WordNetLemmatizer). This runs on a 30,000-review sample for speed.
 
 Output includes:
 - Word clouds separately for positive (4–5 stars), neutral (3 stars), and negative (1–2 stars) reviews
@@ -93,7 +90,7 @@ Positive reviews cluster around words like *love*, *skin*, *feel*, *moisturize*.
 
 ### 5. LDA Topic Modeling
 
-Latent Dirichlet Allocation is fitted on the cleaned review corpus using `CountVectorizer` (max 3,000 features, min_df=5) and `LatentDirichletAllocation` from scikit-learn. Number of topics is adjustable via a slider (3–8) in the dashboard.
+Latent Dirichlet Allocation is fitted on the cleaned review corpus using `CountVectorizer` (max 3,000 features, min_df=5) and LatentDirichletAllocation from scikit-learn. Number of topics is adjustable via a slider (3–8) in the dashboard.
 
 With K=5, the model identifies:
 1. **Moisturization & Hydration** — the dominant use-case
@@ -106,7 +103,7 @@ Each topic is shown as a horizontal bar chart of top-10 weighted terms, with mod
 
 ### 6. K-Means Clustering + PCA
 
-Clustering is done on three product-level features: `price_usd`, `rating`, and `loves_count`, after StandardScaler normalization. The elbow method (K = 2 to 9) clearly bends at K=3, identifying three segments:
+Clustering is done on three product-level features: price_usd, rating, and loves_count, after StandardScaler normalization. The elbow method (K = 2 to 9) clearly bends at K=3, identifying three segments:
 
 - **Budget / Low-Engagement** — lower price, moderate popularity
 - **Mid-Range / Moderate-Popularity** — balanced across all three dimensions
@@ -165,7 +162,7 @@ Opens at `http://localhost:8501`. Data loads and caches on first run — NLP pre
 | Dashboard | Streamlit |
 | Data handling | pandas, NumPy |
 | Visualization | Plotly, Matplotlib, Seaborn |
-| Statistics | SciPy (`chi2_contingency`, `ttest_ind`, `pearsonr`) |
+| Statistics | SciPy (chi2_contingency, ttest_ind, pearsonr) |
 | NLP | NLTK (tokenizer, stopwords, lemmatizer), WordCloud |
 | Machine Learning | scikit-learn (KMeans, PCA, LDA, StandardScaler, CountVectorizer) |
 
