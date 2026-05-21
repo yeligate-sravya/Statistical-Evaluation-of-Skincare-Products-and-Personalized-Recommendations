@@ -240,13 +240,13 @@ html, body, [class*="css"] {
 def load_data():
     import pandas as pd
 
-    # Load product dataset
+    # Product dataset
     df_product = pd.read_csv(
         "https://drive.google.com/uc?id=1cUmKZ3SiOZ75CO7ixTf9Nqzjm9LDAGQL",
         low_memory=False
     )
 
-    # Load review datasets
+    # Review datasets
     review_files = [
         "https://drive.google.com/uc?id=1sYmatoOWNklNK0kt-ivD0WYOg_AWwVgD",
         "https://drive.google.com/uc?id=1h9wijBRmxAnNwtU-TdZEM9ifCAtIULBi",
@@ -258,11 +258,9 @@ def load_data():
     dfs = [pd.read_csv(f, low_memory=False) for f in review_files]
     df_reviews = pd.concat(dfs, ignore_index=True)
 
-    # Remove unnamed columns
     df_reviews = df_reviews.loc[:, ~df_reviews.columns.str.startswith("Unnamed")]
     df_product = df_product.loc[:, ~df_product.columns.str.startswith("Unnamed")]
 
-    # Product columns to keep
     product_cols = [
         "product_id", "brand_id", "loves_count", "reviews", "size",
         "variation_type", "variation_value", "ingredients",
@@ -273,70 +271,11 @@ def load_data():
 
     keep = [c for c in product_cols if c in df_product.columns]
 
-    # Merge datasets
     df_merged = df_reviews.merge(
         df_product[keep],
         on="product_id",
         how="left"
     )
-
-    # Drop high null columns
-    high_null = [
-        "variation_desc", "value_price_usd", "sale_price_usd",
-        "child_max_price", "child_min_price"
-    ]
-
-    df_merged.drop(
-        columns=[c for c in high_null if c in df_merged.columns],
-        inplace=True
-    )
-
-    # Remove rows with too many nulls
-    df_merged = df_merged[df_merged.isnull().sum(axis=1) < 12]
-
-    # Fill missing categorical values
-    for col in ["skin_type", "eye_color", "hair_color", "skin_tone"]:
-        if col in df_merged.columns:
-            df_merged[col] = df_merged[col].fillna("Unknown")
-
-    # Price tiers
-    if "price_usd" in df_merged.columns:
-        df_merged["price_tier"] = pd.cut(
-            df_merged["price_usd"],
-            bins=[0, 25, 50, 100, 500],
-            labels=[
-                "Budget (<$25)",
-                "Mid ($25–50)",
-                "Premium ($50–100)",
-                "Luxury (>$100)"
-            ]
-        )
-
-    # Submission year
-    if "submission_time" in df_merged.columns:
-        df_merged["submission_year"] = pd.to_datetime(
-            df_merged["submission_time"],
-            errors="coerce"
-        ).dt.year
-
-    # Sentiment labels
-    if "rating" in df_merged.columns:
-        df_merged["sentiment_label"] = pd.cut(
-            df_merged["rating"],
-            bins=[0, 2, 3, 5],
-            labels=[
-                "Negative (1–2)",
-                "Neutral (3)",
-                "Positive (4–5)"
-            ]
-        )
-
-    # Recommended conversion
-    if "is_recommended" in df_merged.columns:
-        df_merged["is_recommended"] = pd.to_numeric(
-            df_merged["is_recommended"],
-            errors="coerce"
-        ).fillna(0)
 
     return df_product, df_reviews, df_merged
 
