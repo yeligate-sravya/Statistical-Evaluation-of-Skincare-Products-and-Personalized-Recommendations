@@ -242,7 +242,7 @@ def load_data():
     df_product = pd.read_csv("product_info.csv", low_memory=False)
 
     review_files = [
-        "reviews_0-250.csv", "reviews_250-500.csv",
+        "reviews_0-250.zip", "reviews_250-500.csv",
         "reviews_500-750.csv", "reviews_750-1250.csv", "reviews_1250end.csv",
     ]
     dfs = [pd.read_csv(f, low_memory=False) for f in review_files if os.path.exists(f)]
