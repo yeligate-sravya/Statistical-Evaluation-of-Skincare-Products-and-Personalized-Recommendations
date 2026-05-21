@@ -242,13 +242,13 @@ def load_data():
 
     # Product dataset
     # Google Drive folder links won't work directly.
-    product_file = "https://drive.google.com/file/d/1cUmKZ3SiOZ75CO7ixTf9Nqzjm9LDAGQL/view?usp=drive_link"
+    product_file = "https://drive.google.com/uc?export=download&id=1cUmKZ3SiOZ75CO7ixTf9Nqzjm9LDAGQL"
     review_files = [
-    "https://drive.google.com/file/d/1sYmatoOWNklNK0kt-ivD0WYOg_AWwVgD/view?usp=drive_link",
-    "https://drive.google.com/file/d/1h9wijBRmxAnNwtU-TdZEM9ifCAtIULBi/view?usp=drive_link",
-    "https://drive.google.com/file/d/11MVi8dDeKpvatRSYRszBgQlw8y2-l2bl/view?usp=drive_link",
-    "https://drive.google.com/file/d/1SYFPpvZbGF6b0ZPiBsA4fw_Oi9ak24ER/view?usp=drive_link",
-    "https://drive.google.com/file/d/1ML-kHF0-SFNhWOyC1ypGNfqLpT-0NwdI/view?usp=drive_link",
+    "https://drive.google.com/uc?export=download&id=1sYmatoOWNklNK0kt-ivD0WYOg_AWwVgD",
+    "https://drive.google.com/uc?export=download&id=1h9wijBRmxAnNwtU-TdZEM9ifCAtIULBi",  
+    "https://drive.google.com/uc?export=download&id=11MVi8dDeKpvatRSYRszBgQlw8y2-l2bl",
+    "https://drive.google.com/uc?export=download&id=1SYFPpvZbGF6b0ZPiBsA4fw_Oi9ak24ER",
+    "https://drive.google.com/uc?export=download&id=1ML-kHF0-SFNhWOyC1ypGNfqLpT-0NwdI",
     ]
     df_product = pd.read_csv(product_file, low_memory=False)
     dfs = [pd.read_csv(f, low_memory=False) for f in review_files]
