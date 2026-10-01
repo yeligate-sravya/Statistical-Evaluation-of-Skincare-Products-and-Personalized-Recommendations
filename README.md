@@ -148,7 +148,7 @@ cd sephora-beauty-analytics
 
 pip install -r requirements.txt
 
-streamlit run sephora_streamlit_app_mod.py
+streamlit run sephora_streamlit_dashboard.py
 ```
 
 Opens at `http://localhost:8501`. Data loads and caches on first run — NLP preprocessing takes a minute the first time.
